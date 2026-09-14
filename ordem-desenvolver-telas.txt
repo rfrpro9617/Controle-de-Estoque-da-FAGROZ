@@ -1,0 +1,141 @@
+Ordem de construção das telas (backend real)
+
+Ordem pensada para que cada tela só dependa de dados e regras já existentes. Nada de tela que precise de algo ainda não construído.
+
+Fase 0 — Fundação (antes de qualquer tela)
+
+
+
+
+
+Ativar Lovable Cloud e aplicar a modelagem (tabelas, enums, GRANTs, RLS).
+
+
+
+Autenticação: tela de login/cadastro (/auth) + profiles + user_roles.
+
+
+
+Funções de negócio no banco: registrar_entrada, registrar_saida, registrar_devolucao.
+
+Sem isso, toda tela seguinte fica com dado falso.
+
+Fase 1 — Cadastros de apoio (não dependem de nada)
+
+
+
+
+
+Categorias
+
+
+
+Unidades
+
+
+
+Setores
+
+
+
+Fornecedores
+
+São listas simples (CRUD + inativar). Alimentam os selects de todo o resto.
+
+Fase 2 — Materiais
+
+
+
+
+
+Materiais (lista + cadastro + inativação) — depende de categorias e unidades.
+
+
+
+Detalhe do material (/estoque/:id) — ainda sem histórico real, só ficha e saldo.
+
+Fase 3 — Movimentações (o coração)
+
+
+
+
+
+Estoque Central (lista com saldo, status, busca e filtros).
+
+
+
+Modal de Entrada (avulsa) — primeira operação que altera saldo.
+
+
+
+Modal de Saída — valida saldo central, cria/atualiza posse do setor.
+
+
+
+Distribuído aos Setores (posse por setor / por material).
+
+
+
+Modal de Devolução — valida quantidade em posse.
+
+
+
+Movimentações (histórico completo com filtros por tipo, material, setor, período).
+
+Ordem interna importa: entrada gera saldo, saída consome saldo, posse só existe depois da saída, devolução só existe depois da posse.
+
+Fase 4 — Compras
+
+
+
+
+
+Pedidos (lista + filtros por situação/fornecedor).
+
+
+
+Novo pedido (cabeçalho + itens).
+
+
+
+Detalhe do pedido com recebimento (total e parcial) — aqui a entrada passa a ser vinculada ao pedido e gera gasto.
+
+
+
+Gastos (resumo por material, categoria e período).
+
+Fase 5 — Fechamento
+
+
+
+
+
+Dashboard (indicadores, alertas de estoque baixo, movimentações recentes) — por último, porque agrega todas as fontes.
+
+
+
+Configurações / perfil do usuário.
+
+
+
+Permissões por papel (admin, almoxarife, leitor) aplicadas nas telas.
+
+Detalhes técnicos
+
+
+
+
+
+Cada tela consome os dados por server functions autenticadas; o estado local em src/lib/store.tsx vai sendo substituído tela a tela.
+
+
+
+Recomendação: manter o store atual funcionando durante a migração e trocar uma fase por vez, para o protótipo nunca ficar quebrado.
+
+
+
+Saída/entrada/devolução sempre via função do banco em transação única — nunca com dois updates separados no cliente.
+
+
+
+Status do material (Disponível / Estoque baixo / Sem estoque) é derivado, nunca gravado.

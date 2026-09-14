@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+frontend/dist/
+backend/dist/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs and local runtime files
+*.log
+logs/
+*.pid
+*.seed
+*.pid.lock
+
+# Tool caches
+.cache/
+.vite/
+.eslintcache
+*.tsbuildinfo
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Prisma local artifacts
+prisma/.tmp/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE settings
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
