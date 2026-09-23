@@ -1,19 +1,22 @@
+<script setup>
+import TheSidebar from './components/layout/TheSidebar.vue'
+import TheHeader from './components/layout/TheHeader.vue'
+</script>
+
 <template>
-  <div class="min-h-screen bg-gray-100 flex items-center justify-center">
-    <div class="bg-white p-8 rounded-xl shadow-lg text-center">
-      <h1 class="text-3xl font-bold text-blue-600">
-        Tailwind está funcionando!
-      </h1>
+  <div class="flex h-screen bg-slate-50 overflow-hidden font-sans">
+    <!-- Menu Lateral Fixo -->
+    <TheSidebar />
 
-      <p class="mt-4 text-gray-600">
-        Controle de Materiais da FAGROZ
-      </p>
+    <!-- Área de Conteúdo Principal -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <!-- Cabeçalho -->
+      <TheHeader />
 
-      <button
-        class="mt-6 px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-      >
-        Testar Tailwind
-      </button>
+      <!-- Conteúdo da Página Atual com Scroll Independente -->
+      <main class="flex-1 overflow-y-auto p-8">
+        <RouterView />
+      </main>
     </div>
   </div>
 </template>
